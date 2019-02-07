@@ -21,6 +21,18 @@ class User extends Model {
   products () {
     return this.hasMany('App/Models/Product')
   }
+
+  customers () {
+    return this.hasMany('App/Models/Customer')
+  }
+
+  orders () {
+    return this.hasMany('App/Models/Order')
+  }
+
+  payments () {
+    return this.manyThrough('App/Models/Order', 'payment')
+  }
 }
 
 module.exports = User
