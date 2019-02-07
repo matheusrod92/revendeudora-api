@@ -13,6 +13,10 @@ class Order extends Model {
   payment () {
     return this.hasOne('App/Models/Payment')
   }
+
+  user () {
+    return this.belongsTo('App/Models/User')
+  }
 }
 
 module.exports = Order

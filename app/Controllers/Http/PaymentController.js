@@ -1,68 +1,49 @@
 'use strict'
 
-/** @typedef {import('@adonisjs/framework/src/Request')} Request */
-/** @typedef {import('@adonisjs/framework/src/Response')} Response */
-/** @typedef {import('@adonisjs/framework/src/View')} View */
+const Payment = use('App/Models/Payment')
 
-/**
- * Resourceful controller for interacting with payments
- */
 class PaymentController {
-  /**
-   * Show a list of all payments.
-   * GET payments
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async index ({ request, response, view }) {
+  async index ({ params }) {
+    const payments = await Payment
+      .query()
+      .where('order_id', params.orders_id)
+      .with('orders')
+      .fetch()
+
+    return payments
   }
 
-  /**
-   * Create/save a new payment.
-   * POST payments
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   */
-  async store ({ request, response }) {
+  async store ({ request, params }) {
+    const data = request.only(['type', 'status'])
+
+    const payment = await Payment.create({ ...data, order_id: params.orders_id })
+
+    return payment
   }
 
-  /**
-   * Display a single payment.
-   * GET payments/:id
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async show ({ params, request, response, view }) {
+  async show ({ params }) {
+    const payment = await Payment.findOrFail(params.id)
+
+    await payment.load('order')
+
+    return payment
   }
 
-  /**
-   * Update payment details.
-   * PUT or PATCH payments/:id
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   */
   async update ({ params, request, response }) {
+    const payment = await Payment.findOrFail(params.id)
+    const data = request.only(['type', 'status'])
+
+    payment.merge(data)
+
+    await payment.save()
+
+    return payment
   }
 
-  /**
-   * Delete a payment with id.
-   * DELETE payments/:id
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   */
   async destroy ({ params, request, response }) {
+    const payment = await Payment.findOrFail(params.id)
+
+    await payment.delete()
   }
 }
 

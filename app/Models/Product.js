@@ -9,6 +9,10 @@ class Product extends Model {
       .belongsToMany('App/Models/Order')
       .withTimestamps()
   }
+
+  user () {
+    return this.belongsTo('App/Models/User')
+  }
 }
 
 module.exports = Product
