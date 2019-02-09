@@ -4,8 +4,7 @@ const Payment = use('App/Models/Payment')
 
 class PaymentController {
   async index ({ params }) {
-    const payments = await Payment
-      .query()
+    const payments = await Payment.query()
       .where('order_id', params.orders_id)
       .with('orders')
       .fetch()
@@ -16,7 +15,10 @@ class PaymentController {
   async store ({ request, params }) {
     const data = request.only(['type', 'status'])
 
-    const payment = await Payment.create({ ...data, order_id: params.orders_id })
+    const payment = await Payment.create({
+      ...data,
+      order_id: params.orders_id
+    })
 
     return payment
   }
@@ -29,7 +31,7 @@ class PaymentController {
     return payment
   }
 
-  async update ({ params, request, response }) {
+  async update ({ params, request }) {
     const payment = await Payment.findOrFail(params.id)
     const data = request.only(['type', 'status'])
 
@@ -40,7 +42,7 @@ class PaymentController {
     return payment
   }
 
-  async destroy ({ params, request, response }) {
+  async destroy ({ params }) {
     const payment = await Payment.findOrFail(params.id)
 
     await payment.delete()

@@ -20,7 +20,6 @@ class ProductController {
   async show ({ params }) {
     const product = await Product.findOrFail(params.id)
 
-    await product.load('user')
     await product.load('orders')
 
     return product
@@ -37,7 +36,7 @@ class ProductController {
     return product
   }
 
-  async destroy ({ params, request, response }) {
+  async destroy ({ params }) {
     const product = await Product.findOrFail(params.id)
 
     await product.delete()

@@ -7,10 +7,10 @@ class Product {
 
   get rules () {
     return {
-      sku: 'required|unique|string|max:20',
-      name: 'required|string|max:80',
+      sku: 'required|unique|max:20',
+      name: 'required|max:80',
       value: 'required|number|range:0,99999',
-      description: 'string|max:255'
+      description: 'max:255'
     }
   }
 }

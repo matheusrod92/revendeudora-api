@@ -20,7 +20,7 @@ class CustomerController {
   async show ({ params }) {
     const customer = await Customer.findOrFail(params.id)
 
-    await customer.load('user')
+    await customer.load('orders')
 
     return customer
   }
@@ -36,7 +36,7 @@ class CustomerController {
     return customer
   }
 
-  async destroy ({ params, request, response }) {
+  async destroy ({ params }) {
     const customer = await Customer.findOrFail(params.id)
 
     await customer.delete()

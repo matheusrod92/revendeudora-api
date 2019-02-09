@@ -3,21 +3,30 @@
 const Order = use('App/Models/Order')
 
 class OrderController {
-  async index ({ request, response, view }) {
+  async index () {
     const orders = await Order.all()
 
     return orders
   }
 
   async store ({ request, auth }) {
-    const data = request.only(['customer_id', 'status'])
+    const { payment, ...data } = request.only([
+      'customer_id',
+      'status',
+      'payment'
+    ])
 
     const order = await Order.create({ ...data, user_id: auth.user.id })
+
+    if (payment) {
+      await order.payment().create(payment)
+      await order.load('payment')
+    }
 
     return order
   }
 
-  async show ({ params, request, response, view }) {
+  async show ({ params }) {
     const order = await Order.findOrFail(params.id)
 
     await order.load('products')
@@ -27,18 +36,22 @@ class OrderController {
     return order
   }
 
-  async update ({ params, request, response }) {
+  async update ({ params, request }) {
     const order = await Order.findOrFail(params.id)
-    const data = request.only(['status'])
+    const { payment, ...data } = request.only(['status', 'payment'])
 
     order.merge(data)
-
     await order.save()
+
+    if (payment) {
+      await order.payment().update(payment)
+      await order.load('payment')
+    }
 
     return order
   }
 
-  async destroy ({ params, request, response }) {
+  async destroy ({ params }) {
     const order = await Order.findOrFail(params.id)
 
     await order.delete()

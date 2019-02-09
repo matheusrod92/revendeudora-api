@@ -7,9 +7,10 @@ class User {
 
   get rules () {
     return {
-      name: "required|string|regex:^[a-zA-ZÀ-ÿ][a-zA-ZÀ-ÿ'-]+ [a-zA-ZÀ-ÿ][a-zA-ZÀ-ÿ'. -]*$",
+      name:
+        "required|regex:^[a-zA-ZÀ-ÿ][a-zA-ZÀ-ÿ'-]+ [a-zA-ZÀ-ÿ][a-zA-ZÀ-ÿ'. -]*$",
       email: 'required|email|unique:users',
-      password: 'required|string|confirmed|min:6'
+      password: 'required|confirmed|min:6'
     }
   }
 }
