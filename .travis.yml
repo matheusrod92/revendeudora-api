@@ -3,4 +3,10 @@ node_js:
   - 10.15.0
 sudo: false
 script:
-  - "npm run lint"
+  - npm run lint
+deploy:
+  provider: heroku
+  api_key:
+    secure: c8Mhyu1H4pJtV5T+PYFBYfjY25gIqKxDRVsVD1BoE62TAqNARueYEXe6hMPwZ1iXnfitcfhPQTmcW5nNRFwwvfdf8fczd9ycYW+VdIYzQAMwSrJJu1unFf7GMIyQSTwXaSR/qMYxcXOZtWU+WYOQnBudDBxtgyhj752CkPsiuF9tv+1pMPJ7mjXcEJlfRpcSqCpA2XwcYN93r1vr7E07EU5F+wKNamfYhwzRd+7h2s5V+bUQaW+qYa3SmtYxL7wMqfpWink1rKI2Zu9KX/5vxY/i6h8EIWUxjveuqA2OREfuEKLJtBZHumo52Sne1CGB2CXPjYpTtuZeEDHpN1JNgeyjftq7b6tMO/cBKaADyi2CG8Gf3B8UNB4Yyp9PLbLe6yvS0gMw9iAYRdTEsvbjKrug4LSaRkCIyT7Oos7wyRhTOzIo0vYIXrGYXIJ1hG/cNNVcTG3c0AGsTjkPkI/fRmMFtxsUtiusoV73rasB3U6GJQ9fmOxzL231pJae+bb6jneG2YK6IPXJ8sOCk+4GeKx4ePZStnTeNzioQRT8lzsmPNDVjYL2IMWq7bNCms4ZDpw+Oh0+b/usCx80MH7Y3F3gcj2DZ9xGF8bW3Pc7P6YRcjmALV8oP0TdBIwoDvuFnJ7UImwR75Q0kQZbEVlpdqqlURxcwgUAo5CcTu3bhY8=
+  run:
+    - 'ENV_SILENT=true node ace migration:run --force'
